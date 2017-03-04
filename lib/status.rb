@@ -38,8 +38,6 @@ class Status
     end
   end
 
-  private
-
   def streaming state
     @streaming = state
 
