@@ -33,8 +33,9 @@ class Patreon
 
   def check_user_roles user
     has_role = user.roles.select { |role| role.id == PATREON_HIGH_ROLE_ID }.size > 0
-
     already_patron = is_already_patreon(user.id)
+
+    @logger.debug "Checking '#{user.name}', now = #{has_role}, already = #{already_patron}."
 
     if already_patron.nil?
       @logger.info "No patron information for '#{user.name}', storing as '#{has_role}.'"

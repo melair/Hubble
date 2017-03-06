@@ -3,7 +3,8 @@ GAMES = [
   'with Osber',
   'watching Starrlett',
   'Overwatch',
-  'Secret Hitler'
+  'Secret Hitler',
+  'Starrcraft'
 ]
 
 STREAMING_TEXT = 'with Starrlett'
