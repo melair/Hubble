@@ -62,9 +62,13 @@ class Twitch
 
     if ((current_time - @last_announcement) > DAMPENING_PERIOD)
       @last_announcement = current_time
-      @bot.send_message ANNOUNCE_SNOWFLAKE_ID, "Starrlett is streaming at the moment! @here"
-      @bot.send_message ANNOUNCE_SNOWFLAKE_ID, "Join her for '#{game}'!"
-      @bot.send_message ANNOUNCE_SNOWFLAKE_ID, TWITCH_URL
+
+      @announcement = []
+      @announcement << "Starrlett is streaming at the moment! @here"
+      @announcement << "Join her for '#{game}'!"
+      @announcement << TWITCH_URL
+
+      @bot.send_message ANNOUNCE_SNOWFLAKE_ID, @announcement.join("\n")
     end
   end
 end
