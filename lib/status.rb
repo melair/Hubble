@@ -1,10 +1,13 @@
 GAMES = [
   'with Starr\'s Chest',
   'with Osber',
-  'watching Starrlett',
-  'Overwatch',
+  'Overbutts',
   'Secret Hitler',
-  'Starrcraft'
+  'Starrcraft',
+  'LEGO Starr Wars',
+  'Cards Against Humanity',
+  'Phantasy Starr Online',
+  'Sonic & All-Starrs Racing'
 ]
 
 STREAMING_TEXT = 'with Starrlett'
