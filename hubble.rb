@@ -8,13 +8,14 @@ require_relative 'lib/twitch'
 require_relative 'lib/patreon'
 require_relative 'lib/birthday'
 require_relative 'lib/admin'
+require_relative 'lib/quote'
 
 Dotenv.load
 
 logger = Logger.new(STDOUT)
 
 logger.info "Starting Hubble..."
-bot = Discordrb::Bot.new token: ENV['DISCORD_TOKEN']
+bot = Discordrb::Commands::CommandBot.new token: ENV['DISCORD_TOKEN'], prefix: '!'
 logger.info "Connecting to Discord async."
 bot.run :async
 
@@ -26,6 +27,7 @@ twitch = Twitch.new logger, scheduler, bot, status
 patreon = Patreon.new logger, bot
 birthday = Birthday.new logger, scheduler, bot
 admin = Admin.new logger, bot
+quote = Quote.new logger, scheduler, bot
 
 logger.info "Main thread now waiting on scheduler."
 scheduler.join

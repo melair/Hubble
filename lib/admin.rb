@@ -7,7 +7,7 @@ class Admin
 
     @bot.member_join do |event|
       @logger.debug "Member has joined '#{event.user.name}'."
-      @bot.send_message HUBBLE_CHANNEL_SNOWFLAKE_ID, "#{user.mention} has joined!"
+      @bot.send_message HUBBLE_CHANNEL_SNOWFLAKE_ID, "#{event.user.mention} has joined!"
     end
   end
 end

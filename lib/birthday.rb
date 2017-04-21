@@ -23,7 +23,7 @@ class Birthday
   def is_birthday
     now = Time.now
 
-    if now.day == 7 && now.month = 11
+    if now.day == 7 && now.month == 11
       if @announced_year < now.year
         @announced_year = now.year
         return true
