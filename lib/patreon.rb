@@ -7,6 +7,9 @@ PATREON_SNOWFLAKE_ID = 177204395484774400
 
 PATREON_LOW_ROLE_ID = 287533908533313536
 PATREON_HIGH_ROLE_ID = 177204478246780938
+TWITCH_SUBS_ROLE_ID = 330863224335499264
+
+PATREON_WELCOME_ROLES = [ PATREON_HIGH_ROLE_ID, TWITCH_SUBS_ROLE_ID ]
 
 class Patreon
   def initialize logger, bot
@@ -14,9 +17,19 @@ class Patreon
     @bot = bot
     @logger = logger
 
+    @bot.member_join do |event|
+      @logger.debug "Member join for '#{event.user.name}'."
+      check_user_roles event.user
+    end
+
     @bot.member_update do |event|
       @logger.debug "Member update for '#{event.user.name}'."
       check_user_roles event.user
+    end
+
+    @bot.member_leave do |event|
+      @logger.debug "Member leave for '#{event.user.name}'."
+      @redis.del "patron_#{event.user.id}"
     end
 
     debug_roles
@@ -32,7 +45,9 @@ class Patreon
   private
 
   def check_user_roles user
-    has_role = user.roles.select { |role| role.id == PATREON_HIGH_ROLE_ID }.size > 0
+    roles = user.roles.select { |role| PATREON_WELCOME_ROLES.include? role.id }
+
+    has_role = roles.size > 0
     already_patron = is_already_patreon(user.id)
 
     @logger.debug "Checking '#{user.name}', now = #{has_role}, already = #{already_patron}."
@@ -47,14 +62,16 @@ class Patreon
 
         if has_role
           @logger.info "Announcing new patron membership for '#{user.name}'."
-          announce_patron user
+          announce_patron user, roles
         end
       end
     end
   end
 
-  def announce_patron user
-    msg = @bot.send_message PATREON_SNOWFLAKE_ID, "Everyone @here, please welcome #{user.mention} as a patreon!"
+  def announce_patron user, roles
+    type = roles.include?(TWITCH_SUBS_ROLE_ID) ? "Twitch subscriber" : "Patreon"
+
+    msg = @bot.send_message PATREON_SNOWFLAKE_ID, "Everyone @here, please welcome #{user.mention} as a #{type}!"
     msg.create_reaction @emoji
   end
 
