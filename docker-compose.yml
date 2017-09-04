@@ -1,0 +1,30 @@
+version: "3.1"
+services:
+  hubble:
+    secrets:
+     - hubble_discord_token
+     - hubble_twitch_token
+    image: hubble:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 128M
+    networks:
+      - hubble
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - hubble
+networks:
+  hubble:
+secrets:
+  hubble_discord_token:
+    external: true
+  hubble_twitch_token:
+    external: true
